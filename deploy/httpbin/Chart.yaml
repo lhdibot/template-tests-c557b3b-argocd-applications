@@ -1,0 +1,12 @@
+apiVersion: v2
+name: httpbin
+description: A demo application containing an httpbin service
+type: application
+version: 0.1.0
+appVersion: "1.0"
+
+# Pull Helm chart from external repository (see ###<customer-docs>)
+dependencies:
+- name: dx-universal # Chart name defined in remote source
+  version: 0.1.26 # Update chart version here
+  repository: oci://461893774470.dkr.ecr.us-gov-west-1.amazonaws.com

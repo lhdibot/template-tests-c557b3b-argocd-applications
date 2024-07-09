@@ -1,0 +1,19 @@
+dx-universal:
+  istio:
+    virtualService:
+      # -- Determines if Istio virtual service is enabled.
+      enabled: true
+      # -- Gateways to use for the virtual service.
+      gateways: 
+      - istio-system/ldx-nonprod-1-qa-gateway
+      # -- Hosts included in the virtual service.
+      hosts: 
+      - qa.lighthouse.va.gov
+      # -- URI paths for the virtual service.
+      uri: "/qa/lhdi-httpbin"
+      # -- Path rewrite configuration for the virtual service.
+      rewrite: "/"
+      additionalRoutes:
+      - /flasgger_static
+      - /spec.json
+      - /forms

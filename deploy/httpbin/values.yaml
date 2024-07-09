@@ -1,0 +1,62 @@
+dx-universal:
+  nameOverride: "httpbin"
+  datadogUst:
+    enabled: false
+  deployment:
+    readinessProbe:
+      httpGet:
+        path: '/'
+        port: 80
+    livenessProbe:
+      httpGet:
+        path: '/'
+        port: 80
+    image:
+      repository: kennethreitz/httpbin
+      tag: latest
+    # -- Docker credentials used to pull image. See 'vault' section below.
+    # imagePullSecrets:
+    # - name: dockerhub-secret
+    replicas: 1
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 10m
+        memory: 128Mi
+  service:
+    # -- Determines if the service is enabled.
+    enabled: true
+    # -- Type of service to create.
+    type: ClusterIP
+    # -- Port on which the service is exposed.
+    port: 80
+    # Do we want containerPort instead of forcing everyone to use port 80?
+  rbac:
+    serviceAccount:
+      enabled: true
+  istio:
+    virtualService:
+      # -- Determines if Istio virtual service is enabled.
+      enabled: false
+      # -- Gateways to use for the virtual service.
+      gateways: []
+      # -- Hosts included in the virtual service.
+      hosts: []
+      # -- URI paths for the virtual service.
+      uri: ""
+      # -- Path rewrite configuration for the virtual service.
+      rewrite: ""
+  vault:
+    # -- To enable imagePullSecrets with Vault a secret must be added. 
+    # -- See https://laughing-adventure-wllepqe.pages.github.io/Lighthouse-delivery-infrastructure-tools/Using-the-DI-tools/Step-4-Deploy-your-project-to-dev/Secret-Storage-with-Hashicorp-Vault/
+    enabled: false
+    secrets:
+      dockerhub-secret:
+        type: kubernetes.io/dockerconfigjson
+        # -- Path below corresponds to '<team-name-here>/credentials/dockerhub' in Vault
+        path: "<team-name-here>/data/credentials/dockerhub"
+        data:
+          - key: .dockerconfigjson
+            path: <auth>
